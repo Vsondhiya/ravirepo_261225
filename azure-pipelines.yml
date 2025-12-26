@@ -55,7 +55,16 @@ stages:
         - task: tfsec@1
           inputs:
             version: 'v1.26.0'
-
+  - stage:
+    displayName: Cost_optimization
+    jobs:
+      - job: costofinfra
+        displayName: cost_of_infra
+        steps:
+        - task: InfracostSetup@2
+          inputs:
+            apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
+            version: '0.10.x'
 
         
 
