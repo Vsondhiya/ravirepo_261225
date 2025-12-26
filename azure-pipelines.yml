@@ -4,8 +4,7 @@ trigger: none
 pool:
   name : vinod_pool
 
-variables:
-  WORKING_DIR: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+
 
 stages: 
   - stage: build_stage
@@ -14,17 +13,18 @@ stages:
       - job: init2plan
         displayName: init2plan
         steps: 
-        #- task: TerraformInstaller@1
-        #  displayName: installer
-        #  inputs:
-         #   terraformVersion: 'latest'
+        - task: TerraformInstaller@1
+          displayName: installer
+          inputs:
+            terraformVersion: 'latest'
+
         - task: TerraformTask@5
           displayName: init1
           inputs:
             provider: 'azurerm'
             command: 'init'
             commandOptions: '-upgrade=false'
-            workingDirectory: $(TF_WORKING_DIR)
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
             backendServiceArm: 'vinod_SC'
             backendAzureRmStorageAccountName: 'vinodstg123'
             backendAzureRmContainerName: 'vinodcontainer'
@@ -35,7 +35,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'validate'
-            workingDirectory: $(TF_WORKING_DIR)
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
             environmentServiceNameAzureRM: vinod_SC
 
         - task: TerraformTask@5
@@ -43,7 +43,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'plan'
-            workingDirectory: $(TF_WORKING_DIR)
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
             environmentServiceNameAzureRM: 'vinod_SC'
 
   - stage:
@@ -83,7 +83,7 @@ stages:
             provider: 'azurerm'
             command: 'init'
             commandOptions: '-upgrade=false'
-            workingDirectory: $(TF_WORKING_DIR)
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
             # backendServiceArm: 'vinod_SC'
             backendAzureRmStorageAccountName: 'vinodstg123'
             backendAzureRmContainerName: 'vinodcontainer'
@@ -95,6 +95,6 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'apply'
-            workingDirectory: $(TF_WORKING_DIR)
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
             environmentServiceNameAzureRM: 'vinod_SC'
             
