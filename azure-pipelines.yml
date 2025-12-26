@@ -14,16 +14,16 @@ stages:
       - job: init2plan
         displayName: init2plan
         steps: 
-        - task: TerraformInstaller@1
-          displayName: installer
-          inputs:
-            terraformVersion: 'latest'
+        #- task: TerraformInstaller@1
+        #  displayName: installer
+        #  inputs:
+         #   terraformVersion: 'latest'
         - task: TerraformTask@5
           displayName: init1
           inputs:
             provider: 'azurerm'
             command: 'init'
-            # commandOptions: '-upgrade=false'
+            commandOptions: '-upgrade=false'
             workingDirectory: $(TF_WORKING_DIR)
             backendServiceArm: 'vinod_SC'
             backendAzureRmStorageAccountName: 'vinodstg123'
