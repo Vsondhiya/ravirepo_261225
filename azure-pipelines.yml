@@ -67,13 +67,12 @@ stages:
             apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
             version: '0.10.x'
 
-        - task: InfracostSetup@2
-          displayName: Infra Cost Estimation
+        - task: CmdLine@2
+          displayName: Infra Cost Breakdown
           inputs:
-            apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
             script: |
               infracost breakdown --path=tfplan --format=table
-              
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
           env:
             INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
           
