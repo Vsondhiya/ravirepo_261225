@@ -71,6 +71,7 @@ stages:
                --format=table
           env:
              INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
+          displayName: Infra Cost Estimation
          
         
 
