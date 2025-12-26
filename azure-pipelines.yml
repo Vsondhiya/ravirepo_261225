@@ -12,9 +12,11 @@ stages:
         displayName: init2plan
         steps: 
         - task: TerraformInstaller@1
+          displayName: installer
           inputs:
             terraformVersion: 'latest'
         - task: TerraformTask@5
+          displayName: init1
           inputs:
             provider: 'azurerm'
             command: 'init'
@@ -26,12 +28,14 @@ stages:
             backendAzureRmKey: 'dev.terraform.tfstate'
 
         - task: TerraformTask@5
+          displayName: validate
           inputs:
             provider: 'azurerm'
             command: 'validate'
             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
 
         - task: TerraformTask@5
+          displayName: Plan
           inputs:
             provider: 'azurerm'
             command: 'plan'
@@ -70,6 +74,19 @@ stages:
         dependsOn: manualApproval
         steps:
         - task: TerraformTask@5
+          displayName: init2
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            commandOptions: '-upgrade=false'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+            backendServiceArm: 'vinod_SC'
+            backendAzureRmStorageAccountName: 'vinodstg123'
+            backendAzureRmContainerName: 'vinodcontainer'
+            backendAzureRmKey: 'dev.terraform.tfstate'
+
+        - task: TerraformTask@5
+          displayName: apply
           inputs:
             provider: 'azurerm'
             command: 'apply'
