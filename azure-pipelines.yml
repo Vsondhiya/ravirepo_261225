@@ -43,6 +43,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'plan'
+            commandOptions: '-out=tfplan'
             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
             environmentServiceNameAzureRM: 'vinod_SC'
 
@@ -65,12 +66,16 @@ stages:
           inputs:
             apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
             version: '0.10.x'
-        - script: |
-            infracost breakdown --path=. --format=table
-            workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+        - task: InfracostSetup@2
+          displayName: Infra Cost Estimation
+          inputs:
+            apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
+            script: |
+              infracost breakdown --path=tfplan --format=table
+              workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
           env:
             INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
-          displayName: Infra Cost Estimation
          
         
 
