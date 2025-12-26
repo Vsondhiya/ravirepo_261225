@@ -23,7 +23,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
-            commandOptions: '-upgrade=false'
+            # commandOptions: '-upgrade=false'
             workingDirectory: $(TF_WORKING_DIR)
             backendServiceArm: 'vinod_SC'
             backendAzureRmStorageAccountName: 'vinodstg123'
