@@ -1,0 +1,77 @@
+trigger: none
+
+
+pool:
+  name : vinod_pool
+
+stages: 
+  - stage: build_stage
+    displayName: init_fmt_validate_plan
+    jobs:
+      - job: init2plan
+        displayName: init2plan
+        steps: 
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: 'latest'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            commandOptions: '-upgrade=false'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+            backendServiceArm: 'vinod_SC'
+            backendAzureRmStorageAccountName: 'vinodstg123'
+            backendAzureRmContainerName: 'vinodcontainer'
+            backendAzureRmKey: 'dev.terraform.tfstate'
+
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+            environmentServiceNameAzureRM: 'vinod_SC'
+
+  - stage:
+    displayName: scanning_stage
+    jobs:
+      - job: scanofcode
+        displayName: tfsec
+        steps:
+        - task: tfsec@1
+          inputs:
+            version: 'v1.26.0'
+
+
+        
+
+  - stage:
+    displayName: approval_and_deployment
+    jobs:
+      - job: manualApproval
+        pool: server
+        
+        displayName: ManualApproval
+        steps:
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: 'vsondhiya@gmail.com'
+            approvers: 'vsondhiya@gmail.com'
+            onTimeout: 'resume'
+
+      - job: Apply
+        displayName: Apply
+        dependsOn: manualApproval
+        steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+            environmentServiceNameAzureRM: 'vinod_SC'
