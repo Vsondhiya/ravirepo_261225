@@ -65,12 +65,11 @@ stages:
           inputs:
             apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
             version: '0.10.x'
-        - script:
-             infracost breakdown \
-               --path='$(System.DefaultWorkingDirectory)/
-               --format=table
+        - script: |
+            infracost breakdown --path=. --format=table
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
           env:
-             INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
+            INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
           displayName: Infra Cost Estimation
          
         
