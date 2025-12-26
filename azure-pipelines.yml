@@ -73,10 +73,10 @@ stages:
             apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
             script: |
               infracost breakdown --path=tfplan --format=table
-              workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+              
           env:
             INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
-         
+          
         
 
   - stage:
