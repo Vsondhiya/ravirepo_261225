@@ -65,7 +65,13 @@ stages:
           inputs:
             apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
             version: '0.10.x'
-
+        - script:
+             infracost breakdown \
+               --path='$(System.DefaultWorkingDirectory)/enviorment/dev'
+               --format=table
+          env:
+             INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
+         
         
 
   - stage:
