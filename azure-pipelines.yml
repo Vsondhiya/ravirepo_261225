@@ -67,7 +67,7 @@ stages:
             version: '0.10.x'
         - script:
              infracost breakdown \
-               --path='$(System.DefaultWorkingDirectory)/enviorment/dev'
+               --path='$(System.DefaultWorkingDirectory)/
                --format=table
           env:
              INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
@@ -93,16 +93,7 @@ stages:
         displayName: Apply
         dependsOn: manualApproval
         steps:
-        - task: TerraformTask@5
-          displayName: init2
-          inputs:
-           provider: 'azurerm'
-           command: 'init'
-           commandOptions: '-upgrade=false'
-           workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
-           backendAzureRmStorageAccountName: 'vinodstg123'
-           backendAzureRmContainerName: 'vinodcontainer'
-           backendAzureRmKey: 'dev.terraform.tfstate'
+        
             
 
         - task: TerraformTask@5
