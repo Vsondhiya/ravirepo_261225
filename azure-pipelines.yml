@@ -51,6 +51,18 @@ stages:
           inputs:
             targetPath: '$(System.DefaultWorkingDirectory)/enviorment/dev/tfplan'
             artifact: tfplan
+        - task: CmdLine@2
+          displayName: Convert plan to JSON
+          inputs:
+            script: |
+              terraform show -json tfplan > tfplan.json
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+
+        - task: PublishPipelineArtifact@1
+          displayName: Publish tfplan json
+          inputs:
+            targetPath: '$(System.DefaultWorkingDirectory)/enviorment/dev/tfplan.json'
+            artifact: tfplan-json
 
   - stage:
     displayName: scanning_stage
@@ -71,6 +83,10 @@ stages:
           inputs:
             apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
             version: '0.10.x'
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            artifact: tfplan-json
+            path: '$(System.DefaultWorkingDirectory)/enviorment/dev'
         - task: DownloadPipelineArtifact@2
           displayName: Download tfplan
           inputs:
