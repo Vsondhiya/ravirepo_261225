@@ -1,0 +1,10 @@
+variable "rgs" {}
+variable "networks" {}
+variable "public_ip" {}
+variable "kv" {}
+variable "nic" {}
+variable "snet" {}
+variable "vm" {}
+variable "nsg" {}
+variable "secret_username" {}
+variable "secret_password" {}
