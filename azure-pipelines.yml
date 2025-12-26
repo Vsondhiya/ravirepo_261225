@@ -96,14 +96,13 @@ stages:
         - task: TerraformTask@5
           displayName: init2
           inputs:
-            provider: 'azurerm'
-            command: 'init'
-            commandOptions: '-upgrade=false'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
-            # backendServiceArm: 'vinod_SC'
-            backendAzureRmStorageAccountName: 'vinodstg123'
-            backendAzureRmContainerName: 'vinodcontainer'
-            backendAzureRmKey: 'dev.terraform.tfstate'
+           provider: 'azurerm'
+           command: 'init'
+           commandOptions: '-upgrade=false'
+           workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+           backendAzureRmStorageAccountName: 'vinodstg123'
+           backendAzureRmContainerName: 'vinodcontainer'
+           backendAzureRmKey: 'dev.terraform.tfstate'
             
 
         - task: TerraformTask@5
