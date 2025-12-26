@@ -46,6 +46,11 @@ stages:
             commandOptions: '-out=tfplan'
             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
             environmentServiceNameAzureRM: 'vinod_SC'
+        - task: PublishPipelineArtifact@1
+          displayName: Publish tfplan
+          inputs:
+            targetPath: '$(System.DefaultWorkingDirectory)/enviorment/dev/tfplan'
+            artifact: tfplan
 
   - stage:
     displayName: scanning_stage
@@ -66,6 +71,11 @@ stages:
           inputs:
             apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
             version: '0.10.x'
+        - task: DownloadPipelineArtifact@2
+          displayName: Download tfplan
+          inputs:
+            artifact: tfplan
+            path: '$(System.DefaultWorkingDirectory)/enviorment/dev'
 
         - task: CmdLine@2
           displayName: Infra Cost Breakdown
