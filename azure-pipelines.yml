@@ -5,10 +5,10 @@ pool:
 
 stages: 
   - stage: build_stage
-    displayName: init_validate
+    displayName: init_validate_Plan
     jobs:
       - job: init_validate
-        displayName: init_validate
+        displayName: init_validate_Plan
         steps: 
         - task: TerraformInstaller@1
           displayName: installer
