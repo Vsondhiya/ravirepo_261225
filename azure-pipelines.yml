@@ -93,7 +93,23 @@ stages:
         dependsOn: manualApproval
         steps:
         
+              
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: latest
 
+        - task: AzureCLI@2
+          displayName: Terraform Init
+          inputs:
+            azureSubscription: vinod_SC
+            scriptType: bash
+            scriptLocation: inlineScript
+            workingDirectory: $(System.DefaultWorkingDirectory)/enviorment/dev
+            inlineScript: |
+              terraform init \
+                -backend-config="storage_account_name=vinodstg123" \
+                -backend-config="container_name=vinodcontainer" \
+                -backend-config="key=dev.terraform.tfstate"
         - task: TerraformTask@5
           displayName: apply
           inputs:
