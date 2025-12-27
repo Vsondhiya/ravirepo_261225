@@ -1,17 +1,14 @@
 trigger: none
 
-
 pool:
   name : vinod_pool
 
-
-
 stages: 
   - stage: build_stage
-    displayName: init_fmt_validate_plan
+    displayName: init_validate
     jobs:
-      - job: init2plan
-        displayName: init2plan
+      - job: init_validate
+        displayName: init_validate
         steps: 
         - task: TerraformInstaller@1
           displayName: installer
@@ -38,41 +35,6 @@ stages:
             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
             environmentServiceNameAzureRM: vinod_SC
 
-        - task: TerraformTask@5
-          displayName: Plan
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            commandOptions: '-out=tfplan'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
-            environmentServiceNameAzureRM: 'vinod_SC'
-        - task: PublishPipelineArtifact@1
-          displayName: Publish tfplan
-          inputs:
-            targetPath: '$(System.DefaultWorkingDirectory)/enviorment/dev/tfplan'
-            artifact: tfplan
-        - task: CmdLine@2
-          displayName: Convert plan to JSON
-          inputs:
-            script: |
-              terraform show -json tfplan > tfplan.json
-            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
-
-        - task: PublishPipelineArtifact@1
-          displayName: Publish tfplan json
-          inputs:
-            targetPath: '$(System.DefaultWorkingDirectory)/enviorment/dev/tfplan.json'
-            artifact: tfplan-json
-
-  - stage:
-    displayName: scanning_stage
-    jobs:
-      - job: scanofcode
-        displayName: tfsec
-        steps:
-        - task: tfsec@1
-          inputs:
-            version: 'v1.26.0'
   - stage:
     displayName: Cost_optimization
     jobs:
@@ -83,15 +45,6 @@ stages:
           inputs:
             apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
             version: '0.10.x'
-        - task: DownloadPipelineArtifact@2
-          inputs:
-            artifact: tfplan-json
-            path: '$(System.DefaultWorkingDirectory)/enviorment/dev'
-        - task: DownloadPipelineArtifact@2
-          displayName: Download tfplan
-          inputs:
-            artifact: tfplan
-            path: '$(System.DefaultWorkingDirectory)/enviorment/dev'
 
         - task: CmdLine@2
           displayName: Infra Cost Breakdown
@@ -101,8 +54,24 @@ stages:
             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
           env:
             INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
-          
-        
+
+  - stage:
+    displayName: scanning_stage
+    jobs:
+      - job: scanofcode
+        displayName: tfsec
+        steps:
+        - task: tfsec@1
+          inputs:
+            version: 'v1.26.0'
+
+        - task: TerraformTask@5
+          displayName: Plan
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+            environmentServiceNameAzureRM: 'vinod_SC'
 
   - stage:
     displayName: approval_and_deployment
@@ -122,9 +91,6 @@ stages:
         displayName: Apply
         dependsOn: manualApproval
         steps:
-        
-            
-
         - task: TerraformTask@5
           displayName: apply
           inputs:
