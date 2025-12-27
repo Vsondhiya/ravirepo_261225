@@ -70,7 +70,7 @@ stages:
             provider: 'azurerm'
             command: 'init'
             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
-            backendServiceArm: 'vinod_SC'
+            # backendServiceArm: 'vinod_SC'
             backendAzureRmStorageAccountName: 'vinodstg123'
             backendAzureRmContainerName: 'vinodcontainer'
             backendAzureRmKey: 'dev.terraform.tfstate'
