@@ -50,7 +50,7 @@ stages:
           displayName: Infra Cost Breakdown
           inputs:
             script: |
-              infracost breakdown --path='$(System.DefaultWorkingDirectory)' 
+              infracost breakdown --path=. 
               --format=table
             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
           env:
