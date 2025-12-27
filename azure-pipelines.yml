@@ -50,8 +50,7 @@ stages:
           displayName: Infra Cost Breakdown
           inputs:
             script: |
-              infracost breakdown --path=. 
-              --format=table
+              infracost breakdown --path=. --format=table
             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
           env:
             INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
