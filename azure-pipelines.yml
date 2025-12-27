@@ -34,6 +34,13 @@ stages:
             command: 'validate'
             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
             environmentServiceNameAzureRM: vinod_SC
+        - task: TerraformTask@5
+          displayName: Plan
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+            environmentServiceNameAzureRM: 'vinod_SC'
 
   - stage:
     displayName: Cost_optimization
@@ -64,23 +71,8 @@ stages:
         - task: tfsec@1
           inputs:
             version: 'v1.26.0'
-        - task: TerraformTask@5
-          displayName: Terraform Init
-          inputs:
-            provider: azurerm
-            command: init
-            workingDirectory: $(System.DefaultWorkingDirectory)/enviorment/dev
-            backendServiceArm: vinod_SC
-            backendAzureRmStorageAccountName: vinodstg123
-            backendAzureRmContainerName: vinodcontainer
-            backendAzureRmKey: dev.terraform.tfstate
-        - task: TerraformTask@5
-          displayName: Plan
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
-            environmentServiceNameAzureRM: 'vinod_SC'
+        
+        
 
   - stage:
     displayName: approval_and_deployment
