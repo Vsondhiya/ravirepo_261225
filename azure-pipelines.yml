@@ -65,6 +65,7 @@ stages:
           inputs:
             version: 'v1.26.0'
         - task: TerraformTask@5
+          displayName: initplanwala
           inputs:
             provider: 'azurerm'
             command: 'init'
@@ -73,6 +74,7 @@ stages:
             backendAzureRmStorageAccountName: 'vinodstg123'
             backendAzureRmContainerName: 'vinodcontainer'
             backendAzureRmKey: 'dev.terraform.tfstate'
+            commandOptions: '-backend-config=use_azuread_auth=false'
         - task: TerraformTask@5
           displayName: Plan
           inputs:
