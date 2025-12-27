@@ -102,13 +102,13 @@ stages:
           displayName: Terraform Init
           inputs:
             azureSubscription: vinod_SC
-            scriptType: bash
+            scriptType: ps
             scriptLocation: inlineScript
             workingDirectory: $(System.DefaultWorkingDirectory)/enviorment/dev
             inlineScript: |
-              terraform init \
-                -backend-config="storage_account_name=vinodstg123" \
-                -backend-config="container_name=vinodcontainer" \
+              terraform init `
+                -backend-config="storage_account_name=vinodstg123" `
+                -backend-config="container_name=vinodcontainer" `
                 -backend-config="key=dev.terraform.tfstate"
         - task: TerraformTask@5
           displayName: apply
