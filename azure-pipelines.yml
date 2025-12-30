@@ -53,30 +53,34 @@ stages:
 #        steps:
 
         - task: PowerShell@2
+          displayName: Install Infracost
+          inputs:
+                targetType: inline
+                script: |
+                  Write-Host "Downloading Infracost..."
+                  Invoke-WebRequest https://infracost.io/downloads/latest/infracost-windows-amd64.zip -OutFile infracost.zip
+
+                  Write-Host "Extracting Infracost..."
+                  Expand-Archive infracost.zip -DestinationPath infracost -Force
+
+                  Write-Host "Checking version..."
+                  .\infracost\infracost.exe --version
+
+    # -------------------------------
+    # Infra Cost Breakdown
+    # -------------------------------
+        - task: PowerShell@2
+          displayName: Infra Cost Breakdown
           inputs:
             targetType: inline
-        - script: |
-            Write-Host "Downloading Infracost..."
-            Invoke-WebRequest https://infracost.io/downloads/latest/infracost-windows-amd64.zip -OutFile infracost.zip
-
-            Write-Host "Extracting..."
-            Expand-Archive infracost.zip -DestinationPath infracost -Force
-
-            Write-Host "Adding to PATH..."
-            $env:PATH += ";$(System.DefaultWorkingDirectory)/enviorment/dev"
-
-            infracost\infracost.exe --version
-          displayName: infracost Install
-        - task: PowerShell@2
-        - script: |
-                infracost\infracost.exe breakdown 
-                  --path .
-                  --format table
-          displayName: Infra Cost Breakdown
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+            script: |
+              Write-Host "Running Infracost breakdown..."
+              ..\..\infracost\infracost.exe breakdown `
+                --path . `
+                --format table
           env:
             INFRACOST_API_KEY: $(keyofInfraCost)
-
-
 
 
 #        - task: InfracostSetup@2
