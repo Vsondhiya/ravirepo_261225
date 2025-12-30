@@ -54,7 +54,7 @@ stages:
 
 
         - script: |
-            iwr https://infracost.io/downloads/latest/infracost-windows-amd64.zip -OutFile infracost.zip
+            Invoke-WebRequest https://infracost.io/downloads/latest/infracost-windows-amd64.zip -OutFile infracost.zip
             Expand-Archive infracost.zip -DestinationPath infracost
             $env:PATH += ";$(System.DefaultWorkingDirectory)\infracost"
             infracost\infracost.exe --version
