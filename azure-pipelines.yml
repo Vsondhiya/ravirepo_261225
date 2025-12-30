@@ -67,7 +67,7 @@ stages:
           displayName: infracost Install
 
         - script: |
-                infracost breakdown \
+                infracost\infracost.exe breakdown 
                   --path .
                   --format table
           displayName: Infra Cost Breakdown
