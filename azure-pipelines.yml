@@ -42,12 +42,12 @@ stages:
             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
             environmentServiceNameAzureRM: 'vinod_SC'
 
-  - stage:
-    displayName: Cost_optimization
-    jobs:
-      - job: costofinfra
-        displayName: cost_of_infra
-        steps:
+#  - stage:
+#    displayName: Cost_optimization
+#    jobs:
+#      - job: costofinfra
+#        displayName: cost_of_infra
+#        steps:
         - task: InfracostSetup@2
           inputs:
             apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
