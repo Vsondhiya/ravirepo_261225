@@ -2,7 +2,7 @@ trigger: none
 variables:
 - group: Variable_group_30-Dec
 - name: keyofInfraCost
-
+    Working_path:'$(System.DefaultWorkingDirectory)/enviorment/dev'
 pool:
   name : vinod_pool
 
@@ -24,7 +24,7 @@ stages:
             provider: 'azurerm'
             command: 'init'
             commandOptions: '-upgrade=false'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+            workingDirectory: '$(Working_path)'
             backendServiceArm: 'vinod_SC'
             backendAzureRmStorageAccountName: 'vinodstg123'
             backendAzureRmContainerName: 'vinodcontainer'
@@ -35,22 +35,16 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'validate'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+            workingDirectory: '$(Working_path)'
             environmentServiceNameAzureRM: vinod_SC
         - task: TerraformTask@5
           displayName: Plan
           inputs:
             provider: 'azurerm'
             command: 'plan'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+            workingDirectory: '$(Working_path)'
             environmentServiceNameAzureRM: 'vinod_SC'
 
-#  - stage:
-#    displayName: Cost_optimization
-#    jobs:
-#      - job: costofinfra
-#        displayName: cost_of_infra
-#        steps:
 
         - task: PowerShell@2
           displayName: Install Infracost
@@ -66,14 +60,12 @@ stages:
                   Write-Host "Checking version..."
                   .\infracost\infracost.exe --version
 
-    # -------------------------------
-    # Infra Cost Breakdown
-    # -------------------------------
+
         - task: PowerShell@2
           displayName: Infra Cost Breakdown
           inputs:
             targetType: inline
-            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+            workingDirectory: '$(Working_path)'
             script: |
               Write-Host "Running Infracost breakdown..."
               ..\..\infracost\infracost.exe breakdown `
@@ -82,20 +74,6 @@ stages:
           env:
             INFRACOST_API_KEY: $(keyofInfraCost)
 
-
-#        - task: InfracostSetup@2
-#          inputs:
-#            apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
-#            version: '0.10.x'
-
-#        - task: CmdLine@2
-#          displayName: Infra Cost Breakdown
-#          inputs:
-#            script: |
-#              infracost breakdown --path=. --format=table
-#            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
-#          env:
-#            INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
 
   - stage:
     displayName: scanning_stage
@@ -139,7 +117,7 @@ stages:
             azureSubscription: vinod_SC
             scriptType: ps
             scriptLocation: inlineScript
-            workingDirectory: $(System.DefaultWorkingDirectory)/enviorment/dev
+            workingDirectory: '$(Working_path)'
             inlineScript: |
               terraform init `
                 -backend-config="storage_account_name=vinodstg123" `
@@ -150,6 +128,6 @@ stages:
 #          inputs:
 #             provider: 'azurerm'
 #             command: 'apply'
-#             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+#             workingDirectory: '$(Working_path)'
 #             environmentServiceNameAzureRM: 'vinod_SC'
             
