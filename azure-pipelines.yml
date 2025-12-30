@@ -54,9 +54,15 @@ stages:
 
 
         - script: |
+            Write-Host "Downloading Infracost..."
             Invoke-WebRequest https://infracost.io/downloads/latest/infracost-windows-amd64.zip -OutFile infracost.zip
-            Expand-Archive infracost.zip -DestinationPath infracost
-            $env:PATH += ";$(System.DefaultWorkingDirectory)\infracost"
+
+            Write-Host "Extracting..."
+            Expand-Archive infracost.zip -DestinationPath infracost -Force
+
+            Write-Host "Adding to PATH..."
+            $env:PATH += ";$(System.DefaultWorkingDirectory)/enviorment/dev"
+
             infracost\infracost.exe --version
           displayName: infracost Install
 
