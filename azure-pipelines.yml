@@ -1,4 +1,7 @@
 trigger: none
+variables:
+- group: Variable_group_30-Dec
+- name: keyofInfraCost
 
 pool:
   name : vinod_pool
@@ -48,19 +51,37 @@ stages:
 #      - job: costofinfra
 #        displayName: cost_of_infra
 #        steps:
-        - task: InfracostSetup@2
-          inputs:
-            apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
-            version: '0.10.x'
 
-        - task: CmdLine@2
-          displayName: Infra Cost Breakdown
-          inputs:
-            script: |
-              infracost breakdown --path=. --format=table
-            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
-          env:
-            INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
+
+        - script: |
+                curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | sh
+                infracost --version
+                displayName: Install Infracost
+
+        - script: |
+                infracost breakdown \
+                  --path .
+                  --format table
+                displayName: Infra Cost Breakdown
+                env:
+                  INFRACOST_API_KEY: $(keyofInfraCost)
+
+
+
+
+#        - task: InfracostSetup@2
+#          inputs:
+#            apiKey: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
+#            version: '0.10.x'
+
+#        - task: CmdLine@2
+#          displayName: Infra Cost Breakdown
+#          inputs:
+#            script: |
+#              infracost breakdown --path=. --format=table
+#            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+#          env:
+#            INFRACOST_API_KEY: 'ico-fizfgyE3XeuwWQLPpXwQSK81LjoBfIgS'
 
   - stage:
     displayName: scanning_stage
