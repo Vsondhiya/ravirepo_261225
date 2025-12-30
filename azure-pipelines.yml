@@ -52,7 +52,7 @@ stages:
 #        displayName: cost_of_infra
 #        steps:
 
-
+        - task: PowerShell@2
         - script: |
             Write-Host "Downloading Infracost..."
             Invoke-WebRequest https://infracost.io/downloads/latest/infracost-windows-amd64.zip -OutFile infracost.zip
@@ -65,7 +65,7 @@ stages:
 
             infracost\infracost.exe --version
           displayName: infracost Install
-
+        - task: PowerShell@2
         - script: |
                 infracost\infracost.exe breakdown 
                   --path .
