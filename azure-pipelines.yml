@@ -110,11 +110,11 @@ stages:
                 -backend-config="storage_account_name=vinodstg123" `
                 -backend-config="container_name=vinodcontainer" `
                 -backend-config="key=dev.terraform.tfstate"
-        - task: TerraformTask@5
-          displayName: apply
-          inputs:
-             provider: 'azurerm'
-             command: 'apply'
-             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
-             environmentServiceNameAzureRM: 'vinod_SC'
+#        - task: TerraformTask@5
+#          displayName: apply
+#          inputs:
+#             provider: 'azurerm'
+#             command: 'apply'
+#             workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
+#             environmentServiceNameAzureRM: 'vinod_SC'
             
