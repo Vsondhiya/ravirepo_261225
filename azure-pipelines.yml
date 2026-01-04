@@ -78,14 +78,27 @@ stages:
   - stage:
     displayName: scanning_stage
     jobs:
-      - job: scanofcode
+      - job: tfsec
         displayName: tfsec
         steps:
         - task: tfsec@1
           inputs:
             version: 'v1.26.0'
         
-        
+      - job: tflint
+        dependsOn: tfsec
+        displayName: TFLint
+        steps:
+        - task: PowerShell@2
+          continueOnError: true
+          inputs:
+            targetType: 'inline'
+            script: |
+              winget install TerraformLinters.tflint     
+              ls   
+              tflint
+            errorActionPreference: 'continue'        
+            workingDirectory: '$(System.DefaultWorkingDirectory)/enviorment/dev'
 
   - stage:
     displayName: approval_and_deployment
